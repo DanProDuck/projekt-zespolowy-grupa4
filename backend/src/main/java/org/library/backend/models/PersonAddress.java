@@ -1,55 +1,37 @@
 package org.library.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "Person_address", schema = "public", catalog = "app_database")
+@Table(name = "Person_address")
 public class PersonAddress {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Person_addressID", nullable = false)
-    private int personAddressId;
+    private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PersonID")
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "PersonID", nullable = false)
     @JsonBackReference
     private Person personID;
 
-    public Person getPersonID() {
-        return personID;
-    }
+    @OneToMany(mappedBy = "personAddressid")
+    @JsonManagedReference
+    private Set<Address> addresses = new LinkedHashSet<>();
 
-    public void setPersonID(Person personID) {
-        this.personID = personID;
-    }
-
-    public int getPersonAddressId() {
-        return personAddressId;
-    }
-
-    public void setPersonAddressId(int personAddressId) {
-        this.personAddressId = personAddressId;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PersonAddress that = (PersonAddress) o;
-
-        if (personAddressId != that.personAddressId) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = personAddressId;
-        result = 31 * result;
-        return result;
-    }
 }

@@ -21,5 +21,5 @@ public class PersonDTO implements Serializable {
     private Integer phoneNumber;
     private String surname;
     private String username;
-    private int personId;
+    private int id;
 }

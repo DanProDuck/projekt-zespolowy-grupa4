@@ -10,10 +10,10 @@ public class CaseSensitiveNamingStrategy extends CamelCaseToUnderscoresNamingStr
 
     @Override
     protected Identifier getIdentifier(String name, final boolean quoted, final JdbcEnvironment jdbcEnvironment) {
-        if ( !isCaseInsensitive( jdbcEnvironment ) ) {
-            name = name.toLowerCase( Locale.ROOT );
+        if (!isCaseInsensitive(jdbcEnvironment)) {
+            name = name.toLowerCase(Locale.ROOT);
         }
         //initially quoted was passed as 2nd param
-        return new Identifier( name, true );
+        return new Identifier(name, true);
     }
 }

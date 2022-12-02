@@ -2,136 +2,60 @@ package org.library.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
+@Table(name = "Order")
 public class Order {
-    @Basic
-    @Column(name = "Date_due_to", nullable = true)
-    private Date dateDueTo;
-    @Basic
-    @Column(name = "Date_rent_from", nullable = true)
-    private Date dateRentFrom;
-    @Basic
-    @Column(name = "Description", nullable = true, length = 250)
-    private String description;
-    @Basic
-    @Column(name = "Order_date", nullable = true)
-    private Date orderDate;
-    @Basic
-    @Column(name = "Quantity", nullable = true)
-    private Integer quantity;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OrderID", nullable = false)
-    private int orderId;
+    private Integer id;
 
-    @OneToMany(mappedBy = "orderID")
-    private Set<Product> products = new LinkedHashSet<>();
+    @Column(name = "Date_due_to")
+    private LocalDate dateDueTo;
 
-    @OneToMany(mappedBy = "orderID")
-    @JsonManagedReference
-    private Set<OrderAddress> orderAddresses = new LinkedHashSet<>();
+    @Column(name = "Date_rent_from")
+    private LocalDate dateRentFrom;
+
+    @Size(max = 50)
+    @Column(name = "Description", length = 50)
+    private String description;
+
+    @Column(name = "Order_date")
+    private LocalDate orderDate;
+
+    @Column(name = "Quantity")
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PersonID")
     @JsonBackReference
     private Person personID;
 
-    public Person getPersonID() {
-        return personID;
-    }
+    @OneToMany(mappedBy = "orderID")
+    @JsonManagedReference
+    private Set<Product> products = new LinkedHashSet<>();
 
-    public void setPersonID(Person personID) {
-        this.personID = personID;
-    }
+    @OneToMany(mappedBy = "orderID")
+    @JsonManagedReference
+    private Set<Address> addresses = new LinkedHashSet<>();
 
-    public Set<OrderAddress> getOrderAddresses() {
-        return orderAddresses;
-    }
+    @OneToMany(mappedBy = "orderID")
+    @JsonManagedReference
+    private Set<OrderAddress> orderAddresses = new LinkedHashSet<>();
 
-    public void setOrderAddresses(Set<OrderAddress> orderAddresses) {
-        this.orderAddresses = orderAddresses;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
-
-    public Date getDateDueTo() {
-        return dateDueTo;
-    }
-
-    public void setDateDueTo(Date dateDueTo) {
-        this.dateDueTo = dateDueTo;
-    }
-
-    public Date getDateRentFrom() {
-        return dateRentFrom;
-    }
-
-    public void setDateRentFrom(Date dateRentFrom) {
-        this.dateRentFrom = dateRentFrom;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-
-        if (orderId == order.orderId) if (Objects.equals(dateDueTo, order.dateDueTo))
-        if (Objects.equals(dateRentFrom, order.dateRentFrom)) if (Objects.equals(description, order.description))
-        if (Objects.equals(orderDate, order.orderDate)) if (Objects.equals(quantity, order.quantity))
-        return true;
-
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(dateDueTo, dateRentFrom, description, orderDate, quantity, orderId);
-    }
 }

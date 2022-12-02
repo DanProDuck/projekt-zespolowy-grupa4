@@ -39,7 +39,7 @@ public class PeopleController {
 
     @PatchMapping
     public void updatePerson(@RequestBody PersonDTO personDTO) {
-        int id = personDTO.getPersonId();
+        int id = personDTO.getId();
 
     }
 

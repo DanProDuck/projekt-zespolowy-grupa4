@@ -7,32 +7,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 
-@RestController
+@Controller
 @RequestMapping("/")
 public class HomeController {
 
     @GetMapping
     public String index() {
-        return "Home, sweet home...";
+        return "forward:/home";
     }
 
-    @GetMapping("/admin")
-    public String admin() {
-        return "Admin";
-    }
-
-    @GetMapping("/user")
-    public String user() {
-        return "User";
-    }
-
+    @ResponseBody
     @GetMapping("/currentUserInfo")
     public Person getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -47,8 +36,19 @@ public class HomeController {
         return userDetails;
     }
 
+    @ResponseBody
     @ExceptionHandler
     private ResponseEntity<GeneralErrorResponse> handleException(Exception e) {
+        GeneralErrorResponse res = new GeneralErrorResponse();
+        res.setMessage(e.getMessage());
+        res.setTime(new Timestamp(System.currentTimeMillis()));
+
+        return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ResponseBody
+    @ExceptionHandler
+    private ResponseEntity<GeneralErrorResponse> handleCriticalError(Throwable e) {
         GeneralErrorResponse res = new GeneralErrorResponse();
         res.setMessage(e.getMessage());
         res.setTime(new Timestamp(System.currentTimeMillis()));

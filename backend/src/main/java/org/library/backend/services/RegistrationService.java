@@ -2,13 +2,13 @@ package org.library.backend.services;
 
 import org.library.backend.models.Person;
 import org.library.backend.repositories.PersonRepository;
+import org.library.backend.util.error.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.time.Instant;
 
 @Service
 public class RegistrationService {
@@ -24,13 +24,13 @@ public class RegistrationService {
 
     @Transactional
     public void register(Person person) {
-        if(isEmailPresent(person.getEmail())){
-            throw new RuntimeException("User with provided email already exists");
+        if (isEmailPresent(person.getEmail())) {
+            throw new UserAlreadyExistsException("User with provided email already exists");
         }
 
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setRole("ROLE_USER");
-        person.setCreatedAt(new Date(System.currentTimeMillis()));
+        person.setCreatedAt(new Date(System.currentTimeMillis()).toLocalDate());
         personRepository.save(person);
     }
 

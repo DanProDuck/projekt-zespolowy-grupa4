@@ -9,7 +9,6 @@ import org.library.backend.util.validator.MatchingPassword;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -31,12 +30,15 @@ public class PersonRegistrationDTO implements Serializable {
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters long")
     private String name;
 
+    @NotEmpty
     private String password;
+
+    @NotEmpty
     private String repeatedPassword;
 
     private Integer phoneNumber;
 
-    @NotEmpty(message = "Surname can not be empty")
+    //@NotEmpty(message = "Surname can not be empty")
     @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters long")
     private String surname;
 
