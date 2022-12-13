@@ -22,7 +22,7 @@ function ProductCard(props) { // props.product is the product we are selling
           <CardMedia
             component="img" 
             height="240"
-            image="logo-bookly.png"
+            //image="mcbooks.png"
             //alt = {{product.id}}
           />
           <CardContent>

@@ -1,16 +1,16 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SidebarMenuComponent from './components/SidebarMenu';
+// import SidebarMenuComponent from './components/SidebarMenu';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Cancel from './pages/Cancel';
 import Store from './pages/Store';
 import Success from './pages/Success';
 import Registration from "./pages/Registration";
-import Login from "./pages/Login";
-import CartProvider from './CartContext';
-import { Container } from "react-bootstrap";
-import { Link } from 'react-router-dom';
-import "react-pro-sidebar/dist/css/styles.css";
+ import Login from "./pages/Login";
+ import CartProvider from './CartContext';
+ import { Container } from "react-bootstrap";
+ import { Link } from 'react-router-dom';
+ // import "react-pro-sidebar/dist/css/styles.css";
 //import "./CardStyles.css";
 // localhost:3000 -> Home
 // localhost:3000/success -> Success
@@ -32,7 +32,7 @@ function App() {
               </BrowserRouter>
           </Container>
         </div>
-      </CartProvider>
+      </CartProvider> 
     </>
   );
 }

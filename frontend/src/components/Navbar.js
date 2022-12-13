@@ -1,7 +1,9 @@
 import {Button, Container, Navbar, Modal} from 'react-bootstrap';
 import { useState, useContext } from 'react';
+import TextField from "@mui/material/TextField";
 import { CartContext } from "../CartContext";
 import CartProduct from './CartProduct';
+import logo from '../logo_bookly_v2.png';
 
 function NavbarComponent() {
     const cart = useContext(CartContext);
@@ -9,6 +11,7 @@ function NavbarComponent() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [book, setBook] = useState("");  
 
     const checkout = async () => {
         await fetch('http://localhost:4000/checkout', {
@@ -26,11 +29,20 @@ function NavbarComponent() {
         });
     }
 
+    function handleChange(event) {  
+        const book = event.target.value;  
+        setBook(book);  
+    }  
+
     const productsCount = cart.items.reduce((sum, product) => sum + product.quantity, 0);
     return (
         <>
-            <Navbar expand="sm">
-                <Navbar.Brand href="/">Bookly</Navbar.Brand>
+            <Navbar  expand="sm">
+                <a href="#">
+                    <img width= "50%" auto src={logo} alt="logoBrand"/>
+                    {/* <img max-width= "50%" height="auto" auto src={logo} alt="logoBrand"/> */}
+                </a>
+
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
                     <Button onClick={handleShow}>Cart ({productsCount} Items)</Button>
