@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    CollectiveRepository repository;
+    public final CollectiveRepository repository;
 
     @Autowired
     public AdminService(CollectiveRepository repository) {

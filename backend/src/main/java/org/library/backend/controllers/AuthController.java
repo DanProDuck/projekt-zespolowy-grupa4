@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,12 @@ import javax.validation.Valid;
 import java.sql.Timestamp;
 
 @Controller
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true", origins = "http://localhost:3000")
 @RequestMapping("/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final RegistrationService registrationService;
-    private final PasswordEncoder passwordEncoder;
     private final PersonValidator personValidator;
     private final ModelMapper modelMapper;
 
@@ -46,7 +46,6 @@ public class AuthController {
     public AuthController(AuthenticationManager authenticationManager, RegistrationService registrationService, PasswordEncoder passwordEncoder, PersonValidator personValidator, ModelMapper modelMapper) {
         this.authenticationManager = authenticationManager;
         this.registrationService = registrationService;
-        this.passwordEncoder = passwordEncoder;
         this.personValidator = personValidator;
         this.modelMapper = modelMapper;
     }
@@ -90,10 +89,16 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
+    @GetMapping("/login")
+    public String redirectToLogin() {
+        return "redirect:http://localhost:3000/login";
+    }
+
     @ResponseBody
     @PostMapping("/login")
     public PersonDetails performLogin(HttpServletRequest req, @RequestBody BasicPersonLoginDTO authDTO) {
-        // TODO
+        // TODO add verificatopn of session, if not already logged in
+
         Authentication authentication;
         SecurityContext securityContext;
         HttpSession httpSession;
@@ -107,7 +112,8 @@ public class AuthController {
             securityContext = SecurityContextHolder.getContext();
             securityContext.setAuthentication(authentication);
             httpSession = req.getSession(true);
-            httpSession.setAttribute("SPRING_SECURITY_CONTEXT_KEY", securityContext);
+//            httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+            httpSession.setAttribute("AAAAAAAAAAA", securityContext);
         } catch (BadCredentialsException e) {
             //should also catch Locked and Disabled exceptions to ensure contracts
             throw new UserAuthException(e.getMessage());

@@ -6,15 +6,18 @@ import org.library.backend.repositories.AuthorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/author")
 public class AuthorsController {
 
@@ -27,21 +30,30 @@ public class AuthorsController {
         this.modelMapper = modelMapper;
     }
 
+    //InvalidSessionStrategy for request sessions
+
     @GetMapping
-    public List<Author> index() {
-        return authorRepository.findAll();
+    public ResponseEntity<List<Author>> index(HttpServletRequest req) {
+        var res = authorRepository.findAll();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccessControlAllowMethods(Collections.singletonList(HttpMethod.POST));
+        headers.setAccessControlAllowHeaders(Arrays.asList("Content-Type", "Authorization"));
+        headers.setAccessControlAllowCredentials(true);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Author> findById(@PathVariable int id) {
         var res = authorRepository.findById(id).orElse(null);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        headers.setAccessControlAllowMethods(Collections.singletonList(HttpMethod.POST));
-//        headers.setAccessControlAllowHeaders(Arrays.asList("Content-Type", "Authorization"));
-//        headers.setAccessControlAllowCredentials(true);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccessControlAllowMethods(Collections.singletonList(HttpMethod.POST));
+        headers.setAccessControlAllowHeaders(Arrays.asList("Content-Type", "Authorization"));
+        headers.setAccessControlAllowCredentials(true);
 
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(res, headers, HttpStatus.OK);
     }
 
     @PostMapping

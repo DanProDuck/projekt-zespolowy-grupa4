@@ -73,6 +73,8 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
                 .anyRequest().hasAnyRole("USER", "ADMIN")
+                //roles USER, SUBSCRIBED, PRIVILEGED, ADMIN, default anonymous
+                //.anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
@@ -83,10 +85,10 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/auth/logout")
                 .deleteCookies("JSESSIONID")
-                .and()
-                .rememberMe()
-                .key("secrets")
-                .tokenValiditySeconds(120)
+//                .and()
+//                .rememberMe()
+//                .key("secrets")
+//                .tokenValiditySeconds(120)
                 .and()
                 //.userDetailsService(personDetailsService)
                 //.cors(withDefaults());
@@ -98,7 +100,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {
 //        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("https://localhost:3000"));
+//        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
 //        configuration.setAllowedMethods(List.of("GET", "POST"));
 //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 //        source.registerCorsConfiguration("/**", configuration);
