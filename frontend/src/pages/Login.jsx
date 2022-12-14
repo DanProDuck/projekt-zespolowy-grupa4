@@ -31,9 +31,9 @@ function Login() {
       const rawResponse = await fetch("http://127.0.0.1:8082/auth/login", {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        // 'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        // 'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify(sendData)
     })
@@ -101,10 +101,10 @@ function Login() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth
