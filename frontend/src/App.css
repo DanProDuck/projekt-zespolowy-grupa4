@@ -65,6 +65,7 @@ float: left;
   flex-direction: column;
   row-gap: 20px;
 }
+a { color: inherit; } 
 
 h1 {
   margin: 10px;
