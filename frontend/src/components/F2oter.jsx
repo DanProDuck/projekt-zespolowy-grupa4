@@ -4,7 +4,7 @@ import '../App.css';
 import { createStyles, Anchor, Group, ActionIcon, Center } from '@mantine/core';
 import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
-import logo from '../logo_bookly_v2.png';
+import logo from '../logo_bookly_text.png';
 
 const useStyles = createStyles((theme) => ({
   footer: {
