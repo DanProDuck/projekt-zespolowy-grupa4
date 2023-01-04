@@ -1,19 +1,19 @@
 export const links = {
   links: [
     {
-      link: "#",
+      link: "contact",
       label: "Contact",
     },
     {
-      link: "#",
+      link: "privacy",
       label: "Privacy",
     },
     {
-      link: "#",
+      link: "termsofservice",
       label: "Terms of Service",
     },
     {
-      link: "#",
+      link: "about",
       label: "About",
     },
   ],

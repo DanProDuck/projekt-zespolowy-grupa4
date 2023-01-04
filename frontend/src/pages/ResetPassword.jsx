@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import logo from '../logo-bookly_v2.png';
 //import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -46,6 +47,9 @@ function ResetPassword() {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+        <a href="/">
+          <img style = {{marginTop:"30px"}} width= "40%" src={logo} alt="logoBrand"/>
+        </a>
         <CssBaseline />
         <Box
           sx={{

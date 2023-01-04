@@ -13,6 +13,7 @@ import magelogin from '../login.png';
 //import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import logo from '../logo_bookly_text.png';
 
 const theme = createTheme();
 
@@ -68,6 +69,9 @@ function Login() {
         </img> 
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <a href="/">
+          <img style = {{marginTop:"30px"}} width= "40%" src={logo} alt="logoBrand"/>
+        </a>
           <Box
             sx={{
               my: 8,

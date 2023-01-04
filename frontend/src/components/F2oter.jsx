@@ -2,7 +2,7 @@
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
 import { createStyles, Anchor, Group, ActionIcon, Center } from '@mantine/core';
-import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
+import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram, IconBrandGithub } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
 import logo from '../logo_bookly_text.png';
 
@@ -27,12 +27,11 @@ const useStyles = createStyles((theme) => ({
 
   links: {
     [theme.fn.smallerThan('sm')]: {
-      marginTop: theme.spacing.lg,
+      //marginTop: theme.spacing.lg,
       marginBottom: theme.spacing.sm,
     },
   },
 }));
-
 
 function F2oter( links ) {
 
@@ -43,20 +42,22 @@ function F2oter( links ) {
   const { classes } = useStyles();
 
   const items = links.links.links.map((link) => (
+    <a href={link.link}>
     <Anchor
       color="dimmed"
       key={link.label}
-      href={link.link}
       sx={{ lineHeight: 1 }}
       //onClick={(event) => event.preventDefault()}
       size="sm"
     >
       {link.label}
     </Anchor>
+    </a>
   ));
 
+  //<div className={classes.footer} style ={{'marginTop': '50px','zIndex':'-1', 'position': 'relative', 'bottom': '0px'}}>
   return (
-    <div className={classes.footer} style ={{'marginTop': '50px','zIndex':'-1', 'position': 'relative', 'bottom': '0px'}}>
+    <div className={classes.footer} style ={{'marginTop': '50px','zIndex':'-1', 'bottom': '0px'}}>
         <div style = {{ 'borderRadius':'15px','background': 'linear-gradient(120.08deg, #995AE7 0.53%, #AAFDE4 100%)' }}>
             <div className={classes.inner}>
                 <a href="#">
@@ -66,15 +67,17 @@ function F2oter( links ) {
         <Group className={classes.links}>{items}</Group>
 
         <Group spacing="xs" position="right" noWrap>
-          <ActionIcon size="lg" variant="default" radius="xl">
+{          /*<ActionIcon size="lg" variant="default" radius="xl">
             <IconBrandTwitter size={18} stroke={1.5} />
           </ActionIcon>
           <ActionIcon size="lg" variant="default" radius="xl">
             <IconBrandYoutube size={18} stroke={1.5} />
-          </ActionIcon>
+          </ActionIcon>*/}
+          <a href = "https://github.com/DanProDuck/projekt-zespolowy-grupa4">
           <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandInstagram size={18} stroke={1.5} />
+            <IconBrandGithub size={18} stroke={1.5}/>
           </ActionIcon>
+          </a>
           
         </Group>
       </div>

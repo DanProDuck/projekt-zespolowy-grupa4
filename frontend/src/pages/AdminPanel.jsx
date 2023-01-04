@@ -33,12 +33,12 @@ const AdminPanel = (props) => {
 }, [api]);
 
   if (loading) {
-    // TODO use mantine slick loaders 👀
+    // TODO use mantine slick loaders 👀 // im trying...
     return <p>Loading data...</p>
   }
 
   if (error) {
-    //use error hander later
+    //use error hander later // Owkey... im trying... >_<
     return <p>Error: {error}</p>
   }
 

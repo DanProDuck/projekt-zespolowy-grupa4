@@ -46,7 +46,7 @@ function NavbarComponent() {
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
                     <Button onClick={handleShow}>Cart ({productsCount} Items)</Button>
-                    <a style={{marginLeft: '10px'}} href = "http://localhost:3000/registration">Sign In/Up</a>
+                    <a style={{marginLeft: '10px'}} href = "login">Sign In/Up</a>
                 </Navbar.Collapse>
             </Navbar>
             <Modal show={show} onHide={handleClose}>
