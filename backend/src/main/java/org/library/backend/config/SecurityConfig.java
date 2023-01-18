@@ -20,7 +20,7 @@ import java.util.Properties;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
+public class SecurityConfig { 
 
     private final PersonDetailsService personDetailsService;
 
@@ -28,35 +28,6 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
     public SecurityConfig(PersonDetailsService personDetailsService, Environment env) {
         this.personDetailsService = personDetailsService;
     }
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/admin").hasRole("ADMIN")
-//                .antMatchers("/user").hasRole("USER")
-//                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-//                //.anyRequest().hasAnyRole("USER", "ADMIN")
-//                .anyRequest().permitAll()
-//                .and()
-//                .formLogin()
-//                .loginPage("/auth/login")
-////                .loginProcessingUrl("/process_login")
-//                .defaultSuccessUrl("/", true)
-//                //.successHandler()
-//                .failureUrl("/auth/login?error")
-//                .and()
-//                .logout()
-//                .logoutUrl("/auth/logout")
-//                .logoutSuccessUrl("/")
-////                .and()
-////                .cors()
-////                .and()
-////                .sessionManagement()
-////                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-//        ;
-//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
