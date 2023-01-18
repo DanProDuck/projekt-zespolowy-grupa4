@@ -14,16 +14,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.sql.Timestamp;
-import java.util.Map;
 
 @Controller
+@CrossOrigin(value = "https://app-bookly.herokuapp.com", allowCredentials = "true")
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -40,17 +47,10 @@ public class AuthController {
         this.modelMapper = modelMapper;
     }
 
-//    @GetMapping("/login")
-//    public String loginPage() {
-//        return "login";
-//    }
-
     @ResponseBody
     @PostMapping("/registration")
-    ////Not model attribute, but RequestBody with DTO?
-    //public String registrationPage(@ModelAttribute("person") Person person) {
-    public PersonRegistrationDTO register(@RequestBody @Valid PersonRegistrationDTO regDTO,
-                                          BindingResult bindingResult) {
+    public ResponseEntity<String> register(@RequestBody @Valid PersonRegistrationDTO regDTO,
+                                           BindingResult bindingResult) {
         Person person = convertToPerson(regDTO);
 
         personValidator.validate(person, bindingResult);
@@ -60,11 +60,18 @@ public class AuthController {
         }
 
         registrationService.register(person);
-        return regDTO;
+
+        String response = "{\"msg\": \"Success\"}";
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/registration")
+    public ResponseEntity<String> confirmRegistration(@RequestParam String confirm_token) {
+        return new ResponseEntity<>("", HttpStatus.PERMANENT_REDIRECT);
     }
 
     @GetMapping("/registrationPage")
-    //Not model attribute, but RequestBody with DTO?
     public String performRegistration(@ModelAttribute("person") @Valid Person person,
                                       BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
@@ -77,20 +84,40 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
+    @GetMapping("/login")
+    public String redirectToLogin() {
+        return "redirect:http://localhost:3000/login";
+    }
+
     @ResponseBody
     @PostMapping("/login")
-    public BasicPersonLoginDTO performLogin(@RequestBody BasicPersonLoginDTO authDTO) {
-        // TODO
+    public ResponseEntity<String> performLogin(HttpServletRequest req, @RequestBody BasicPersonLoginDTO authDTO) {
+        // TODO add verification of session, if not already logged in
+
+        Authentication authentication;
+        SecurityContext securityContext;
+        HttpSession httpSession;
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword());
+                new UsernamePasswordAuthenticationToken(
+                        authDTO.getUsername(),
+                        authDTO.getPassword());
 
         try {
-            authenticationManager.authenticate(authToken);
+            authentication = authenticationManager.authenticate(authToken);
+            securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authentication);
+            httpSession = req.getSession(true);
+            //
+            httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
         } catch (BadCredentialsException e) {
-            return authDTO.setUsername(e.getMessage());
+            throw new UserAuthException(e.getMessage());
+        } catch (DisabledException e) {
+            throw new UserAuthException("User has a disabled status. Perhaps user didn't confirm it through email?");
         }
 
-        return authDTO;
+        System.out.println(securityContext.getAuthentication().getPrincipal());
+
+        return new ResponseEntity<>("{\"status\": \"success\"}", HttpStatus.OK);
     }
 
     @ExceptionHandler
@@ -99,7 +126,7 @@ public class AuthController {
         genErr.setMessage(e.getMessage());
         genErr.setTime(new Timestamp(System.currentTimeMillis()));
 
-        return new ResponseEntity<>(genErr, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(genErr, HttpStatus.UNAUTHORIZED);
     }
 
     public Person convertToPerson(PersonRegistrationDTO personDTO) {

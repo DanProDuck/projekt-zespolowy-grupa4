@@ -17,12 +17,19 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class AddressDTO implements Serializable {
     private Integer id;
+    @Size(max = 75)
     private String additionalInfo;
+    @Size(max = 50)
     private String city;
+    @Size(max = 30)
     private String country;
+    @Size(max = 50)
     private String details;
     private Integer houseNumber;
+    @Size(max = 12)
     private String postalCode;
+    @Size(max = 100)
     private String street;
-    private Integer streetNumber;
+    @Size(max = 12)
+    private String streetNumber;
 }

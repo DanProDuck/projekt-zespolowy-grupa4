@@ -1,15 +1,14 @@
 package org.library.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,16 +21,16 @@ public class Address {
     @Column(name = "AddressID", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
-    @Column(name = "Additional_info", length = 50)
+    @Size(max = 75)
+    @Column(name = "Additional_info", length = 75)
     private String additionalInfo;
 
     @Size(max = 50)
     @Column(name = "City", length = 50)
     private String city;
 
-    @Size(max = 50)
-    @Column(name = "Country", length = 50)
+    @Size(max = 30)
+    @Column(name = "Country", length = 30)
     private String country;
 
     @Size(max = 50)
@@ -41,32 +40,24 @@ public class Address {
     @Column(name = "House_number")
     private Integer houseNumber;
 
-    @Size(max = 50)
-    @Column(name = "Postal_code", length = 50)
+    @Size(max = 12)
+    @Column(name = "Postal_code", length = 12)
     private String postalCode;
 
-    @Size(max = 50)
-    @Column(name = "Street", length = 50)
+    @Size(max = 100)
+    @Column(name = "Street", length = 100)
     private String street;
 
-    @Column(name = "Street_number")
-    private Integer streetNumber;
+    @Size(max = 12)
+    @Column(name = "Street_number", length = 12)
+    private String streetNumber;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Person_addressID", nullable = false)
-    @JsonBackReference
-    private PersonAddress personAddressid;
+    @OneToMany(mappedBy = "addressID")
+    @JsonManagedReference
+    private Set<Order> orders = new LinkedHashSet<>();
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Order_addressID", nullable = false)
-    @JsonBackReference
-    private OrderAddress orderAddressid;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "OrderID")
-    @JsonBackReference
-    private Order orderID;
+    @OneToMany(mappedBy = "addressID")
+    @JsonManagedReference
+    private Set<Person> people = new LinkedHashSet<>();
 
 }

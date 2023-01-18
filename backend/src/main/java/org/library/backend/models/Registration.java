@@ -1,15 +1,14 @@
 package org.library.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,15 +21,16 @@ public class Registration {
     @Column(name = "RegistrationID", nullable = false)
     private Integer id;
 
-    @Column(name = "Expire_at")
-    private Instant expireAt;
+    @Column(name = "Registrated_at")
+    private Instant registratedAt;
 
-    @Size(max = 50)
-    @Column(name = "Registration_token", length = 50)
+    @Size(max = 75)
+    @Column(name = "Registration_token", length = 75)
     private String registrationToken;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PersonID")
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "PersonID", nullable = false)
     @JsonBackReference
     private Person personID;
 

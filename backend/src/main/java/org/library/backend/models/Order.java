@@ -1,18 +1,16 @@
 package org.library.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.library.backend.util.constants.OrderType;
+import org.library.backend.util.constants.StatusType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -31,8 +29,8 @@ public class Order {
     @Column(name = "Date_rent_from")
     private LocalDate dateRentFrom;
 
-    @Size(max = 50)
-    @Column(name = "Description", length = 50)
+    @Size(max = 150)
+    @Column(name = "Description", length = 150)
     private String description;
 
     @Column(name = "Order_date")
@@ -41,21 +39,30 @@ public class Order {
     @Column(name = "Quantity")
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PersonID")
+    @Column(name = "Status", length = 20)
+    @Enumerated(EnumType.STRING)
+    private StatusType status;
+
+    @Column(name = "Type", length = 5)
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "AddressID", nullable = false)
+    @JsonBackReference
+    private Address addressID;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "PersonID", nullable = false)
     @JsonBackReference
     private Person personID;
 
-    @OneToMany(mappedBy = "orderID")
-    @JsonManagedReference
-    private Set<Product> products = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "orderID")
-    @JsonManagedReference
-    private Set<Address> addresses = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "orderID")
-    @JsonManagedReference
-    private Set<OrderAddress> orderAddresses = new LinkedHashSet<>();
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ProductID", nullable = false)
+    @JsonBackReference
+    private Product productID;
 
 }

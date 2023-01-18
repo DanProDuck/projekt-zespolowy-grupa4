@@ -16,4 +16,20 @@ public class CaseSensitiveNamingStrategy extends CamelCaseToUnderscoresNamingStr
         //initially quoted was passed as 2nd param
         return new Identifier(name, true);
     }
+
+
+    @Override
+    public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment jdbcEnvironment) {
+
+        if ( name == null ) {
+            return null;
+        }
+        StringBuilder builder = new StringBuilder( name.getText().replace( '.', '_' ) );
+
+        return getIdentifier( builder.toString(), name.isQuoted(), jdbcEnvironment );
+    }
+
+    private boolean isUnderscoreRequired(final char before, final char current, final char after) {
+        return Character.isLowerCase( before ) && Character.isUpperCase( current ) && Character.isLowerCase( after );
+    }
 }

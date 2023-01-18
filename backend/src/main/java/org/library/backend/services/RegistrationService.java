@@ -2,6 +2,7 @@ package org.library.backend.services;
 
 import org.library.backend.models.Person;
 import org.library.backend.repositories.PersonRepository;
+import org.library.backend.util.constants.PersonRole;
 import org.library.backend.util.error.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.Instant;
 
 @Service
 public class RegistrationService {
@@ -29,8 +31,14 @@ public class RegistrationService {
         }
 
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        person.setRole("ROLE_USER");
-        person.setCreatedAt(new Date(System.currentTimeMillis()).toLocalDate());
+        person.setRole(PersonRole.ROLE_USER);
+        person.setCreatedAt(Instant.now());
+        person.setIsEnabled(false);
+        person.setIsRestricted(false);
+
+        //create token
+        //add it to database
+
         personRepository.save(person);
     }
 

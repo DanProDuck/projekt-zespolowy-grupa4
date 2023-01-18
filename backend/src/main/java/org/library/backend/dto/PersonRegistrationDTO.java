@@ -36,9 +36,7 @@ public class PersonRegistrationDTO implements Serializable {
     @NotEmpty
     private String repeatedPassword;
 
-    private Integer phoneNumber;
-
-    //@NotEmpty(message = "Surname can not be empty")
+    @NotEmpty(message = "Surname can not be empty")
     @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters long")
     private String surname;
 
